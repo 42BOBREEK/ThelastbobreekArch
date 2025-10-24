@@ -1,7 +1,75 @@
-###BackupArch — Полное восстановление окружения Arch Linux. Этот репозиторий содержит полный бэкап конфигов, dotfiles, тем и пакетов, чтобы быстро восстановить рабочее окружение на новом Arch Linux с Hyprland. В папке dotfiles находятся все конфиги приложений (~/.config и dotfiles), в packages/pacman.txt — список пакетов pacman, в packages/aur.txt — список AUR пакетов, в scripts/setup.sh — универсальный скрипт для установки системы, а также папки Graphite-gtk-theme и Papirus-icon-theme с темой и иконками. Скрипт setup.sh устанавливает все пакеты из pacman.txt и aur.txt, создаёт бэкап старых конфигов, копирует все dotfiles в ~/.config и домашний каталог, устанавливает GTK тему и иконки, настраивает Zsh, Powerlevel10k и плагины.
+# ThelastbobreekArch Setup 🚀
 
-Для установки на новом Arch нужно выполнить: сначала клонировать репозиторий командой git clone https://github.com/USERNAME/BackupArch.git && cd BackupArch, затем сделать скрипт исполняемым chmod +x scripts/setup.sh и запустить ./scripts/setup.sh. После выполнения скрипта перезапустите терминал или выполните source ~/.zshrc, а для полной интеграции Hyprland и тем рекомендуется перезагрузка reboot.
+Скрипт автоматической установки моего окружения Arch Linux.
 
-Скрипт автоматически установит yay, если он не найден, чтобы AUR пакеты были установлены. Все старые конфиги перемещаются в папку ~/.config_backup_YYYYMMDD_HHMMSS. Если GTK тема или иконки не установлены локально, их нужно будет установить через скрипт внутри папки темы. Скрипт также автоматически устанавливает Oh My Zsh, Powerlevel10k и плагины zsh-autosuggestions и zsh-syntax-highlighting. После установки рекомендуется запустить p10k configure для настройки Powerlevel10k.
+## 📦 Step 1 — Установка базовых пакетов
 
-Перед запуском убедитесь, что у вас есть интернет и sudo доступ. Для полной идентичности окружения можно дополнительно сохранить локальные шрифты в ~/.local/share/fonts. Для обновления конфигов просто заменяйте содержимое папки dotfiles и снова запускайте setup.sh. Этот README вместе с setup.sh позволяет полностью восстановить вашу среду на новой системе без ручной настройки каждого приложения.
+```bash
+sudo pacman -S wofi kitty freetype2 zsh git hyprlock hyprpaper waybar ttf-font-awesome otf-font-awesome ttf-jetbrains-mono obsidian pavucontrol feh ranger thunar meson nwg-look papirus-icon-theme fastfetch file powerline-fonts inetutils ttf-font-awesome otf-font-awesome ttf-jetbrains-mono neovim code ttf-dejavu bluez bluez-utils blueman telegram-desktop vlc fastfetch
+
+git clone https://aur.archlinux.org/yay.git
+cd yay
+makepkg -si
+
+yay -S hyprshot wlogout
+```
+
+---
+
+## 📁 Step 2 — Добавление репозиториев
+
+```bash
+cd ~/Documents
+
+git clone https://github.com/vinceliuice/Graphite-gtk-theme.git
+git clone https://github.com/itRoy-pentest/RoyHyprland.git
+```
+
+---
+
+## ⚙️ Step 3 — Копирование конфигов
+
+```bash
+cd RoyHyprland
+cp -r kitty waybar wlogout wofi hypr fastfetch ~/.config
+
+cd Graphite-gtk-theme
+./install.sh
+```
+
+---
+
+## 💻 Step 4 — Настройка Zsh и тем
+
+```bash
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+
+nvim ~/.zshrc
+
+# Внутри файла ~/.zshrc:
+ZSH_THEME="powerlevel10k/powerlevel10k"
+plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
+
+source ~/.zshrc
+chsh
+/bin/zsh
+
+reboot
+```
+
+---
+
+## 🧠 Описание
+
+Этот репозиторий устанавливает полностью готовое окружение Arch Linux с Hyprland, Waybar, Wofi, Kitty и Zsh (Oh My Zsh + Powerlevel10k).  
+Идеален для быстрого развёртывания нового рабочего окружения.
+
+---
+
+## 🐧 Репозиторий
+
+[GitHub: 42BOBREEK/ThelastbobreekArch](https://github.com/42BOBREEK/ThelastbobreekArch)
